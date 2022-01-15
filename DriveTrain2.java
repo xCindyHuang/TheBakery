@@ -32,16 +32,7 @@ public class DriveTrain2 extends LinearOpMode {
 
         pulley.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
-        //Set up linear slides information
-        if (pulley.getCurrentPosition() == getTicks(-20)) {
-            linearSlidesNotDown = false;
-            linearSlidesNotUp = true;
-        }
-        
-        if (pulley.getCurrentPosition() == getTicks(20)) {
-            linearSlidesNotDown = true;
-            linearSlidesNotUp = false;
-        }
+        carriage.setPosition(0.9);
         
         MotorFL.setDirection(DcMotor.Direction.REVERSE);
         MotorFR.setDirection(DcMotor.Direction.REVERSE);
@@ -59,14 +50,10 @@ public class DriveTrain2 extends LinearOpMode {
         while (opModeIsActive()) {
             
             //Linear Slides Control
-            if (gamepad2.dpad_up && linearSlidesNotUp) {
+            if (gamepad2.dpad_up) {
                 runSlides(-20, -0.5);
-                linearSlidesNotUp = false;
-                linearSlidesNotDown = true;
-            } else if (gamepad2.dpad_down && linearSlidesNotDown) {
+            } else if (gamepad2.dpad_down) {
                 runSlides(20, 0.5);
-                linearSlidesNotDown = false;
-                linearSlidesNotUp = true;
             } else {
                 pulley.setPower(0);
             }
@@ -83,10 +70,9 @@ public class DriveTrain2 extends LinearOpMode {
             }
             
             //Carriage Controls
-            if (gamepad2.x && linearSlidesNotDown) {
+            if (gamepad2.x) {
                 carriage.setPosition(-1);
                 sleep(500);
-            } else {
                 carriage.setPosition(0.9);
             }
             
