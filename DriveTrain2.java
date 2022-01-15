@@ -31,15 +31,14 @@ public class DriveTrain2 extends LinearOpMode {
         carriage = hardwareMap.get(Servo.class, "car");
 
         pulley.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //pulley.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //pulley.setTargetPosition(0);
         
-        if (pulley.getCurrentPosition() <= -20) {
+        //Set up linear slides information
+        if (pulley.getCurrentPosition() == getTicks(-20)) {
             linearSlidesNotDown = false;
             linearSlidesNotUp = true;
         }
         
-        if (pulley.getCurrentPosition() >= 20) {
+        if (pulley.getCurrentPosition() == getTicks(20)) {
             linearSlidesNotDown = true;
             linearSlidesNotUp = false;
         }
@@ -60,13 +59,11 @@ public class DriveTrain2 extends LinearOpMode {
         while (opModeIsActive()) {
             
             //Linear Slides Control
-            if (gamepad2.dpad_up && linearSlidesNotUp /*&& pulley.getCurrentPosition() < 100*/) {
-                //pulley.setPower(-0.5);
+            if (gamepad2.dpad_up && linearSlidesNotUp) {
                 runSlides(-20, -0.5);
                 linearSlidesNotUp = false;
                 linearSlidesNotDown = true;
-            } else if (gamepad2.dpad_down && linearSlidesNotDown /*&& pulley.getCurrentPosition() > findCap()*/) {
-                //pulley.setPower(0.5);
+            } else if (gamepad2.dpad_down && linearSlidesNotDown) {
                 runSlides(20, 0.5);
                 linearSlidesNotDown = false;
                 linearSlidesNotUp = true;
@@ -130,6 +127,16 @@ public class DriveTrain2 extends LinearOpMode {
             MotorFR.setPower(0.6 * -speed);
             MotorBR.setPower(0.6 * -speed);
         }
+    }
+    
+    private int getTicks(double inches) {
+        double TICKS_PER_MOTOR_REV = 537.6;
+        double DRIVE_GEAR_REDUCTION = 1.0;
+        double WHEEL_DIAMETER_INCHES = 1.5;
+        double COUNTS_PER_INCH = (TICKS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+           (WHEEL_DIAMETER_INCHES * 3.1415);
+        
+        return (int)(inches * COUNTS_PER_INCH);
     }
     
     private void runSlides(double pos, double power){
