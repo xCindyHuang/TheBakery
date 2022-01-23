@@ -56,10 +56,14 @@ public class DriveTrain2 extends LinearOpMode {
             //Set linear Slides
             if (gamepad2.b) {
                 linearSlidesDown = !linearSlidesDown;
+                telemetry.addData("Is Down = ", linearSlidesDown);
+                telemetry.update();
             }
             
             if (gamepad2.a) {
                 linearSlidesMiddle = !linearSlidesMiddle;
+                telemetry.addData("Is Middle = ", linearSlidesMiddle);
+                telemetry.update();
             }
             
             if (gamepad2.y && !linearSlidesMiddle) {
@@ -71,7 +75,7 @@ public class DriveTrain2 extends LinearOpMode {
                 } else {
                     Drive(0);
                     carriage.setPosition(0.85);
-                    runSlides(15, 0.5);
+                    runSlides(5, 0.5);
                     linearSlidesMiddle = true;
                 }
             }
@@ -80,7 +84,7 @@ public class DriveTrain2 extends LinearOpMode {
             if (gamepad2.dpad_up && linearSlidesMiddle) {
                 Drive(0);
                 carriage.setPosition(0.85);
-                runSlides(-15, -0.5);
+                runSlides(-5, -0.5);
                 linearSlidesMiddle = false;
                 linearSlidesDown = false;
             } else if (gamepad2.dpad_down && linearSlidesMiddle) {
