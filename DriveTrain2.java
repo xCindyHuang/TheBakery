@@ -56,7 +56,7 @@ public class DriveTrain2 extends LinearOpMode {
             //Set linear Slides
             if (gamepad2.b) {
                 linearSlidesDown = !linearSlidesDown;
-                telemetry.addData("Is Down = ", linearSlidesDown);
+                telemetry.addData("Linear Slides are Down = ", linearSlidesDown);
                 telemetry.update();
             }
             
