@@ -136,7 +136,8 @@ public class DriveTrain2 extends LinearOpMode {
             if (gamepad1.right_stick_x != 0) {//turning
                 Turn(gamepad1.right_stick_x);
             } else { //driving
-                Drive(-gamepad1.left_stick_y);
+                //Drive(-gamepad1.left_stick_y);
+                mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y); //to switch mecanum
             }
         }
     }
