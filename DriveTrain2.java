@@ -17,8 +17,12 @@ public class DriveTrain2 extends LinearOpMode {
     public Servo carriage;
     public boolean linearSlidesDown;
     public boolean linearSlidesMiddle;
-    static boolean staticLinearSlidesDown = true;
-    static boolean staticLinearSlidesMiddle;
+    static boolean staticLinearSlidesDown, staticLinearSlidesMiddle;
+    
+    static {
+        staticLinearSlidesDown = true;
+        staticLinearSlidesMiddle = false;
+    }
         
     @Override
     public void runOpMode() {
