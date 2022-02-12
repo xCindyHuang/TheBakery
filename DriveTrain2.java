@@ -15,8 +15,6 @@ public class DriveTrain2 extends LinearOpMode {
     public DcMotor MotorFR, MotorBR;
     public DcMotor rot, intake, pulley;
     public Servo carriage;
-    public boolean linearSlidesDown;
-    public boolean linearSlidesMiddle;
     static boolean staticLinearSlidesDown, staticLinearSlidesMiddle;
     
     static {
@@ -59,59 +57,56 @@ public class DriveTrain2 extends LinearOpMode {
 
         while (opModeIsActive()) {
             
-            staticLinearSlidesDown = linearSlidesDown;
-            staticLinearSlidesMiddle = linearSlidesMiddle;
-            
             //Set linear Slides
             if (gamepad2.b) {
-                linearSlidesDown = !linearSlidesDown;
-                telemetry.addData("Linear Slides are Down = ", linearSlidesDown);
+                staticLinearSlidesDown = !staticLinearSlidesDown;
+                telemetry.addData("Linear Slides are Down = ", staticLinearSlidesDown);
                 telemetry.update();
             }
             
             if (gamepad2.a) {
-                linearSlidesMiddle = !linearSlidesMiddle;
-                telemetry.addData("Is Middle = ", linearSlidesMiddle);
+                staticLinearSlidesMiddle = !staticLinearSlidesMiddle;
+                telemetry.addData("Is Middle = ", staticLinearSlidesMiddle);
                 telemetry.update();
             }
             
-            if (gamepad2.y && !linearSlidesMiddle) {
-                if (linearSlidesDown) {
+            if (gamepad2.y && !staticLinearSlidesMiddle) {
+                if (staticLinearSlidesDown) {
                     Drive(0);
                     carriage.setPosition(0.85);
                     runSlides(-15, -0.5);
-                    linearSlidesMiddle = true;
+                    staticLinearSlidesMiddle = true;
                 } else {
                     Drive(0);
                     carriage.setPosition(0.85);
                     runSlides(5, 0.5);
-                    linearSlidesMiddle = true;
+                    staticLinearSlidesMiddle = true;
                 }
             }
             
             //Linear Slides Control
-            if (gamepad2.dpad_up && linearSlidesMiddle) {
+            if (gamepad2.dpad_up && staticLinearSlidesMiddle) {
                 Drive(0);
                 carriage.setPosition(0.85);
                 runSlides(-5, -0.5);
-                linearSlidesMiddle = false;
-                linearSlidesDown = false;
-            } else if (gamepad2.dpad_down && linearSlidesMiddle) {
+                staticLinearSlidesMiddle = false;
+                staticLinearSlidesDown = false;
+            } else if (gamepad2.dpad_down && staticLinearSlidesMiddle) {
                 Drive(0);
                 carriage.setPosition(0.95);
                 runSlides(15, 0.5);
-                linearSlidesMiddle = false;
-                linearSlidesDown = true;
-            } else if (gamepad2.dpad_up && linearSlidesDown) {
+                staticLinearSlidesMiddle = false;
+                staticLinearSlidesDown = true;
+            } else if (gamepad2.dpad_up && staticLinearSlidesDown) {
                 Drive(0);
                 carriage.setPosition(0.85);
                 runSlides(-20, -0.5);
-                linearSlidesDown = false;
-            } else if (gamepad2.dpad_down && !linearSlidesDown) {
+                staticLinearSlidesDown = false;
+            } else if (gamepad2.dpad_down && !staticLinearSlidesDown) {
                 Drive(0);
                 carriage.setPosition(0.95);
                 runSlides(20, 0.5);
-                linearSlidesDown = true;
+                staticLinearSlidesDown = true;
             } else {
                 pulley.setPower(0);
             }
@@ -126,7 +121,7 @@ public class DriveTrain2 extends LinearOpMode {
             }
             
             //Carriage Controls
-            if (gamepad2.x && (!linearSlidesDown || linearSlidesMiddle)) {
+            if (gamepad2.x && (!staticLinearSlidesDown || staticLinearSlidesMiddle)) {
                 carriage.setPosition(-1);
                 sleep(500);
                 carriage.setPosition(0.95);
