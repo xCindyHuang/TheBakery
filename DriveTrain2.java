@@ -17,6 +17,8 @@ public class DriveTrain2 extends LinearOpMode {
     public Servo carriage;
     public boolean linearSlidesDown;
     public boolean linearSlidesMiddle;
+    static boolean staticLinearSlidesDown = true;
+    static boolean staticLinearSlidesMiddle;
         
     @Override
     public void runOpMode() {
@@ -33,8 +35,8 @@ public class DriveTrain2 extends LinearOpMode {
         pulley.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         //Set up linear slides information
-        linearSlidesDown = true;
-        linearSlidesMiddle = false;
+        linearSlidesDown = staticlinearSlidesDown;
+        linearSlidesMiddle = staticLinearSlidesMiddle;
         
         carriage.setPosition(0.95);
         
@@ -52,6 +54,9 @@ public class DriveTrain2 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            
+            staticLinearSlidesDown = linearSlidesDown;
+            staticLinearSlidesMiddle = linearSlidesMiddle;
             
             //Set linear Slides
             if (gamepad2.b) {
