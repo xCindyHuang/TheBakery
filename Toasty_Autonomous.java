@@ -86,7 +86,7 @@ public class Toasty_Autonomous extends LinearOpMode {
         return (int)(inches * COUNTS_PER_INCH);
     }
     
-    private void runEncoders(double power, double fLeft, double fRight, double bLeft, double bRight) {
+    private void runEncoders(double powerFL, double powerFR, double powerBL, double powerBR, double fLeft, double fRight, double bLeft, double bRight) {
         int newFL, newFR, newBL, newBR;
         
         if (opModeIsActive()) {
@@ -110,10 +110,10 @@ public class Toasty_Autonomous extends LinearOpMode {
             MotorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             MotorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             
-            MotorFL.setPower(power);
-            MotorFR.setPower(power);
-            MotorBL.setPower(power);
-            MotorBR.setPower(power);
+            MotorFL.setPower(powerFL);
+            MotorFR.setPower(powerFR);
+            MotorBL.setPower(powerBL);
+            MotorBR.setPower(powerBR);
             
             while(MotorFL.isBusy() && MotorFR.isBusy() 
                 && MotorBL.isBusy() && MotorBR.isBusy()) {}
