@@ -9,6 +9,13 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import java.util.List;
 
 @Autonomous(name="Toasty Auto", group="Autonomous")
 public class Toasty_Autonomous extends LinearOpMode {
@@ -18,7 +25,20 @@ public class Toasty_Autonomous extends LinearOpMode {
     public Servo carriage;
     public boolean linearSlidesDown;
     public boolean linearSlidesMiddle;
+    
+    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    private static final String[] LABELS = {
+      "Ball",
+      "Cube",
+      "Duck",
+      "Marker"
+    };  
         
+    private static final String VUFORIA_KEY =
+            "ASdNKIP/////AAABmdFRJ5lzZU9trvU+e5m6JXgIW2PDH+WmK3xTNC7Htzdfb4CzcB8AHCXyEH7T0rnwdrijg1f3B8EKSCwhIC59xvknhxUk1XFl4p662I1v4lqIloMVxHKagWKkt+p8IYWTAgre1AkYn882sqZee2DpCRp2Hu47655aQKTxMQ2HMEPO7tepR1AOrwiuliAYi5TRJEa4DVVi9+M5IXaX+mmHk6ftmCX0SuVCODwXeIjlHbeUVktKAXZwgV+ld9qQzMcLyZByz5qowLVqjJsFNpul2Z4xsg6hGL7sjO0uwgineew/mYzVYGvKNJlXUBCHA3gH4I2HwFzznFbjZCPSXmphITW97fNKKR+2fieFs3mJeHLr";
+
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
         
     @Override
     public void runOpMode() {
@@ -36,6 +56,9 @@ public class Toasty_Autonomous extends LinearOpMode {
         
         carriage.setPosition(0.95);
         
+        initVuforia();
+        initTfod();
+        
         MotorFL.setDirection(DcMotor.Direction.REVERSE);
         MotorFR.setDirection(DcMotor.Direction.REVERSE);
         MotorBL.setDirection(DcMotor.Direction.REVERSE);
@@ -51,7 +74,21 @@ public class Toasty_Autonomous extends LinearOpMode {
 
         while (opModeIsActive()) {
             
+            if (tfod != null) {
+                tfod.activate();
+                tfod.setZoom(2.5, 16.0/9.0);
+            }
+            
+            runEncoders(0.5, -0.5, -0.5, 0.5, 24, -24, -24, 24);
+            runEncoders(0.5, 0.5, 0.5, 0.5, 18, 18, 18, 18);
+            runEncoders(-0.5, 0.5, 0.5, -0.5, -18, 18, 18, -18);
         }
+    }
+    
+    
+    public List<Recognition> getObjects() {
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        return updatedRecognitions;
     }
 
     //Front is 223rpm, Back is 312rpm
@@ -86,7 +123,8 @@ public class Toasty_Autonomous extends LinearOpMode {
         return (int)(inches * COUNTS_PER_INCH);
     }
     
-    private void runEncoders(double powerFL, double powerFR, double powerBL, double powerBR, double fLeft, double fRight, double bLeft, double bRight) {
+    private void runEncoders(double powerFL, double powerFR, double powerBL, double powerBR,
+                            double fLeft, double fRight, double bLeft, double bRight) {
         int newFL, newFR, newBL, newBR;
         
         if (opModeIsActive()) {
@@ -131,6 +169,33 @@ public class Toasty_Autonomous extends LinearOpMode {
             sleep(250);
         }
         
+    }
+    
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //parameters.cameraDirection = CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }
+
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.isModelTensorFlow2 = true;
+        tfodParameters.inputSize = 320;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }
     
     private void runSlides(double pos, double power) {
