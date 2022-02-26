@@ -15,8 +15,14 @@ public class DriveTrain2 extends LinearOpMode {
     public DcMotor MotorFR, MotorBR;
     public DcMotor rot, intake, pulley, pulley2;
     public Servo carriage;
-    public boolean linearSlidesDown;
-    public boolean linearSlidesMiddle;
+    public static boolean linearSlidesDown;
+    public static boolean linearSlidesMiddle;
+    
+    static {
+        //Set up linear slides information
+        linearSlidesDown = true;
+        linearSlidesMiddle = false;
+    }
         
     @Override
     public void runOpMode() {
@@ -32,10 +38,6 @@ public class DriveTrain2 extends LinearOpMode {
         carriage = hardwareMap.get(Servo.class, "car");
 
         pulley2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        
-        //Set up linear slides information
-        linearSlidesDown = true;
-        linearSlidesMiddle = false;
         
         carriage.setPosition(0.95);
         
