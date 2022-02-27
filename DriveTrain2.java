@@ -57,7 +57,7 @@ public class DriveTrain2 extends LinearOpMode {
         while (opModeIsActive()) {
             
             //Set linear Slides
-            if (gamepad2.b) {
+            /*if (gamepad2.b) {
                 linearSlidesDown = !linearSlidesDown;
                 telemetry.addData("Linear Slides are Down = ", linearSlidesDown);
                 telemetry.update();
@@ -67,7 +67,7 @@ public class DriveTrain2 extends LinearOpMode {
                 linearSlidesMiddle = !linearSlidesMiddle;
                 telemetry.addData("Is Middle = ", linearSlidesMiddle);
                 telemetry.update();
-            }
+            }*/
             
             if (gamepad2.y && !linearSlidesMiddle) {
                 if (linearSlidesDown) {
@@ -140,7 +140,7 @@ public class DriveTrain2 extends LinearOpMode {
                 Turn(gamepad1.right_stick_x);
             } else { //driving
                 //Drive(-gamepad1.left_stick_y);
-                mecanumDrive_Cartesian(gamepad1.left_stick_x, -gamepad1.left_stick_y, Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y)); 
+                mecanumDrive_Cartesian(gamepad1.left_stick_x, -gamepad1.left_stick_y, Math.tan(gamepad1.left_stick_y/gamepad1.left_stick_x)); 
             }
         }
     }
@@ -191,15 +191,15 @@ public class DriveTrain2 extends LinearOpMode {
     
         if (opModeIsActive()) {
             
-            //pulley.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            pulley.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             pulley2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             
             newPos = (int)(pos * COUNTS_PER_INCH);
           
-            //pulley.setTargetPosition(newPos);
+            pulley.setTargetPosition(newPos);
             pulley2.setTargetPosition(newPos);
 
-            //pulley.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            pulley.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             pulley2.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
             pulley.setPower(power);
@@ -213,7 +213,7 @@ public class DriveTrain2 extends LinearOpMode {
             pulley.setPower(0);
             pulley2.setPower(0);
 
-            //pulley.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            pulley.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             pulley2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
             sleep(250);
