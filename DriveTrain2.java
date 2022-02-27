@@ -140,7 +140,7 @@ public class DriveTrain2 extends LinearOpMode {
                 Turn(gamepad1.right_stick_x);
             } else { //driving
                 //Drive(-gamepad1.left_stick_y);
-                mecanumDrive_Cartesian(gamepad1.left_stick_x, -gamepad1.left_stick_y, Math.tan(gamepad1.left_stick_y/gamepad1.left_stick_x)); 
+                mecanumDrive_Cartesian(gamepad1.left_stick_x, gamepad1.left_stick_y, Math.tan(gamepad1.left_stick_y/gamepad1.left_stick_x)); 
             }
         }
     }
@@ -233,9 +233,9 @@ public class DriveTrain2 extends LinearOpMode {
 
         normalize(wheelSpeeds);
 
-        MotorFL.setPower(wheelSpeeds[0]);
+        MotorFL.setPower(-wheelSpeeds[0]);
         MotorFR.setPower(wheelSpeeds[1]);
-        MotorBL.setPower(wheelSpeeds[2]);
+        MotorBL.setPower(-wheelSpeeds[2]);
         MotorBR.setPower(wheelSpeeds[3]);
     }
 
