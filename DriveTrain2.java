@@ -38,6 +38,7 @@ public class DriveTrain2 extends LinearOpMode {
         carriage = hardwareMap.get(Servo.class, "car");
 
         pulley2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pulley.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         carriage.setPosition(0.95);
         
@@ -205,7 +206,7 @@ public class DriveTrain2 extends LinearOpMode {
             pulley.setPower(power);
             pulley2.setPower(power);
 
-            while (opModeIsActive() && pulley2.isBusy())
+            while (opModeIsActive() && pulley2.isBusy() && pulley.isBusy())
             {
                //Wait for it to finish rotating
             }
