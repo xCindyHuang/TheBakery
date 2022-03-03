@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import java.util.List;
+import java.util.Timer;
 
 @Autonomous(name="Toasty Auto", group="Autonomous")
 public class Toasty_Autonomous extends LinearOpMode {
@@ -39,6 +40,11 @@ public class Toasty_Autonomous extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
+    
+    //PID
+    double prop = 1;
+    double deriv = 1;
+    double integ = 1;
         
     @Override
     public void runOpMode() {
@@ -79,12 +85,47 @@ public class Toasty_Autonomous extends LinearOpMode {
                 tfod.setZoom(2.5, 16.0/9.0);
             }
             
-            runEncoders(0.5, -0.5, -0.5, 0.5, 24, -24, -24, 24);
-            runEncoders(0.5, 0.5, 0.5, 0.5, 18, 18, 18, 18);
-            runEncoders(-0.5, 0.5, 0.5, -0.5, -18, 18, 18, -18);
+            //main code
         }
     }
     
+    
+    public void runPID(double error) {
+        MotorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Timer t = new Timer();
+        double i = 0;
+        double p = 0;
+        double d = 0;
+        double prevTime = 0;
+        double prev = 0;
+        while (error > 0.000001) {
+            error -= MotorFL.getCurrentPosition();
+            
+            p = error;
+            i += error;
+            
+            double time = System.nanoTime();
+            d = (error - prev)/(time - prevTime);
+            
+            prevTime = time;
+            prev = error;
+            
+            double power = p * prop + i * integ + d * deriv;
+            power = -1 + 2 * (power * 0.01);
+            
+            MotorFL.setPower(power);
+            MotorFR.setPower(power);
+            MotorBL.setPower(power);
+            MotorBR.setPower(power);
+            
+        }
+        
+        MotorFL.setPower(0);
+        MotorFR.setPower(0);
+        MotorBL.setPower(0);
+        MotorBR.setPower(0);
+        
+    }
     
     public List<Recognition> getObjects() {
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
