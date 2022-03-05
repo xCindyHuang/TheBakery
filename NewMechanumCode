@@ -159,6 +159,54 @@ public class NewMechanumCode extends LinearOpMode {
         }
     }
 
+    void Turn (float speed){
+        if(gamepad1.a)
+        {
+            MotorFL.setPower(1*speed);
+            MotorBL.setPower(1*speed);
+            MotorFR.setPower(1*speed);
+            MotorBR.setPower(1*speed);
+
+        }
+        if(gamepad1.b)
+        {
+            MotorFL.setPower(0.3*speed);
+            MotorBL.setPower(0.3*speed);
+            MotorFR.setPower(0.3*speed);
+            MotorBR.setPower(0.3*speed);
+
+        }
+        else {
+            MotorFL.setPower(0.6 * speed);
+            MotorBL.setPower(0.6 * speed);
+            MotorFR.setPower(0.6 * speed);
+            MotorBR.setPower(0.6 * speed);
+        }
+    }
+    
+    void Strafe (float speed){
+        if(gamepad1.a)
+        {
+            MotorFL.setPower(0.9*speed);
+            MotorBL.setPower(0.9*-speed);
+            MotorFR.setPower(0.9*speed);
+            MotorBR.setPower(0.9*-speed);
+        }
+        if(gamepad1.b)
+        {
+            MotorFL.setPower(0.3*speed);
+            MotorBL.setPower(0.3*-speed);
+            MotorFR.setPower(0.3*speed);
+            MotorBR.setPower(0.3*-speed);
+        }
+        else {
+            MotorFL.setPower(0.6 * speed);
+            MotorBL.setPower(0.6 * -speed);
+            MotorFR.setPower(0.6 * speed);
+            MotorBR.setPower(0.6 * -speed);
+        }
+    }
+
     //Front is 223rpm, Back is 312rpm
     void Drive (float speed){
         if(gamepad1.a) {
