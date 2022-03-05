@@ -121,21 +121,34 @@ public class NewMechanumCode extends LinearOpMode {
             }
             
             //file was erased so mecanum code needs to put back in
-            double x = gamepad1.right_stick_x * 1.1;
+            /*double x = gamepad1.right_stick_x * -1.1;
             double y = gamepad1.right_stick_y;
-            double rx = gamepad2.right_stick_x;
+            double rx = gamepad1.left_stick_x;
             
             double normalize = Math.abs(x) + Math.abs(y) + Math.abs(rx);
             
             double flpower = (x + y + rx)/normalize;
-            double blpower = (x + y + rx)/normalize;
-            double frpower = (x + y + rx)/normalize;
-            double brpower = (x + y + rx)/normalize;
+            double blpower = (-x + y + rx)/normalize;
+            double frpower = (-x + y - rx)/normalize;
+            double brpower = (x + y - rx)/normalize;
             
             MotorFL.setPower(flpower);
             MotorBL.setPower(blpower);
             MotorFR.setPower(frpower);
-            MotorBR.setPower(brpower);
+            MotorBR.setPower(brpower);*/
+            
+            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+            double rightX = gamepad1.right_stick_x;
+            final double v1 = r * Math.cos(robotAngle) + rightX;
+            final double v2 = r * Math.sin(robotAngle) - rightX;
+            final double v3 = r * Math.sin(robotAngle) + rightX;
+            final double v4 = r * Math.cos(robotAngle) - rightX;
+            
+            MotorFL.setPower(v1);
+            MotorFR.setPower(v2);
+            MotorBL.setPower(v3);
+            MotorBR.setPower(v4);
         }
     }
 
