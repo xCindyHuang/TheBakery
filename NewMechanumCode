@@ -137,7 +137,7 @@ public class NewMechanumCode extends LinearOpMode {
             MotorFR.setPower(frpower);
             MotorBR.setPower(brpower);*/
             
-            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            /*double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
             double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
             double rightX = gamepad1.right_stick_x;
             final double v1 = r * Math.cos(robotAngle) + rightX;
@@ -148,7 +148,14 @@ public class NewMechanumCode extends LinearOpMode {
             MotorFL.setPower(v1);
             MotorFR.setPower(v2);
             MotorBL.setPower(v3);
-            MotorBR.setPower(v4);
+            MotorBR.setPower(v4);*/
+            
+            if (gamepad1.left_stick_x != 0)
+                Strafe(-gamepad1.left_stick_x);
+            else if (gamepad1.left_stick_y != 0)
+                Drive(gamepad1.left_stick_y);
+            else
+                Turn(-gamepad1.right_stick_x);
         }
     }
 
