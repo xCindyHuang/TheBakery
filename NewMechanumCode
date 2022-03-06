@@ -57,12 +57,12 @@ public class NewMechanumCode extends LinearOpMode {
                 if (linearSlidesDown) {
                     Drive(0);
                     carriage.setPosition(0.85);
-                    runSlides(-15, -0.5);
+                    runSlides(15, 0.5);
                     linearSlidesMiddle = true;
                 } else {
                     Drive(0);
                     carriage.setPosition(0.85);
-                    runSlides(5, 0.5);
+                    runSlides(-5, -0.5);
                     linearSlidesMiddle = true;
                 }
             }
@@ -71,24 +71,24 @@ public class NewMechanumCode extends LinearOpMode {
             if (gamepad2.dpad_up && linearSlidesMiddle) {
                 Drive(0);
                 carriage.setPosition(0.85);
-                runSlides(-5, -0.5);
+                runSlides(5, 0.5);
                 linearSlidesMiddle = false;
                 linearSlidesDown = false;
             } else if (gamepad2.dpad_down && linearSlidesMiddle) {
                 Drive(0);
                 carriage.setPosition(0.95);
-                runSlides(15, 0.5);
+                runSlides(-15, -0.5);
                 linearSlidesMiddle = false;
                 linearSlidesDown = true;
             } else if (gamepad2.dpad_up && linearSlidesDown) {
                 Drive(0);
                 carriage.setPosition(0.85);
-                runSlides(-20, -0.5);
+                runSlides(20, 0.5);
                 linearSlidesDown = false;
             } else if (gamepad2.dpad_down && !linearSlidesDown) {
                 Drive(0);
                 carriage.setPosition(0.95);
-                runSlides(20, 0.5);
+                runSlides(-20, -0.5);
                 linearSlidesDown = true;
             } else {
                 pulley.setPower(0);
@@ -106,7 +106,7 @@ public class NewMechanumCode extends LinearOpMode {
             //Carriage Controls
             if (gamepad2.x && (!linearSlidesDown || linearSlidesMiddle)) {
                 carriage.setPosition(1);
-                sleep(500);
+                sleep(1000);
                 carriage.setPosition(0.50);
                 sleep(500);
             }
