@@ -270,6 +270,10 @@ public class NewMechanumCode extends LinearOpMode {
             while (opModeIsActive() /* && (pulley2.isBusy() || pulley.isBusy())*/ && pulley.isBusy())
             {
                //Wait for it to finish rotating
+               /*if (!pulley.isBusy())
+                    pulley.setPower(0);
+                 if (!pulley2.isBusy())
+                    pulley2.setPower(0);*/
             }
           
             pulley.setPower(0);
