@@ -20,21 +20,26 @@ public class Test extends LinearOpMode {
         DcMotor motor1 = hardwareMap.get(DcMotor.class, "arm");
         DcMotor motor2 = hardwareMap.get(DcMotor.class, "arm2");
         
-
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
 
-        // run until the end of the match (driver presses STOP)
+        long start;
         while (opModeIsActive()) {
             if (gamepad2.left_stick_y != 0) {
                 motor1.setPower(gamepad2.left_stick_y * 0.75);
                 motor2.setPower(gamepad2.left_stick_y * 0.75);
+                start = System.currentTimeMillis();
             } else {
-                motor1.setPower(-0.35);
-                motor2.setPower(-0.35);
+                if (System.currentTimeMillis() - start > 25) {
+                    motor1.setPower(-0.35);
+                    motor2.setPower(-0.35);
+                } else {
+                    motor1.setPower(0);
+                    motor2.setPower(0);
+                }
             }
         }
     }}
